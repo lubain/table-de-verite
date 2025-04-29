@@ -3,27 +3,47 @@ from flask_cors import CORS
 from logic.solver import LogicSolver
 
 app = Flask(__name__)
-# CORS(app)  # Cette ligne permet à toutes les origines d'accéder à votre serveur Flask
-CORS(app, resources={r"/truth_table": {"origins": "http://localhost:8080"}})  # Limite l'origine à localhost:8080
+CORS(app)  # Permet toutes les origines
 
-@app.route('/truth_table', methods=['POST'])
+@app.route('/truth_table', methods=['POST', 'OPTIONS'])
 def truth_table():
+    print(request.method)
+    if request.method == 'OPTIONS':
+        # Gérer la requête preflight
+        response = app.make_default_options_response()
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST')
+        return response
+
     try:
         hypothese = request.json['hypothese']
         solver = LogicSolver(hypothese)
         B, variables = solver.solve()
+        tableaux = transpose_table(B)
         
-        return jsonify({'variables': variables, 'tableaux': B})
+        response = jsonify({'variables': variables, 'tableaux': tableaux})
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+        return response
     except Exception as e:
         print("Erreur :", str(e))
         return jsonify({'error': str(e)}), 500
 
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response
+def transpose_table(mat):
+        if not mat or not mat[0]:
+            return []
+        
+        rows = len(mat[0])
+        cols = len(mat)
+
+        transposed = []
+        for i in range(rows):
+            row = []
+            for j in range(cols):
+                row.append(mat[j][i])
+            transposed.append(row)
+            
+        return transposed
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5000, debug=True)

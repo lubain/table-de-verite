@@ -9,7 +9,7 @@ import {
   Paper,
   TextField,
 } from "@mui/material";
-import api from "./hooks/use-api";
+import api from "./presentation/hooks/use-api";
 
 function App() {
   const [error, setError] = useState("");
@@ -19,9 +19,10 @@ function App() {
 
   const getTable = async () => {
     try {
-      const response = await api.post("/", {
+      const response = await api.post("/truth_table", {
         hypothese: hypothese,
       });
+
       if (response.data.error) {
         setError(response.data.error);
       } else {
@@ -29,8 +30,8 @@ function App() {
         setTableaux(response.data.tableaux);
         setError(""); // Clear any previous errors
       }
-    } catch (error) {
-      // setError(`Erreur lors de l'enregistrement de l'audio: ${error.response ? error.response.data.error : error.message}`);
+    } catch (error: any) {
+      setError(`Erreur: ${error.message}`);
     }
   };
 
@@ -44,7 +45,8 @@ function App() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 3,
+        gap: 6,
+        padding: 20,
       }}
     >
       <TextField
@@ -53,7 +55,7 @@ function App() {
         label="Entrer l'hypothese"
         fullWidth
       />
-      <TableContainer component={Paper} style={{ width: "98%" }}>
+      <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow className="hover:bg-slate-200">

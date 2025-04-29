@@ -14,8 +14,6 @@ class FormulaParser:
                 else:
                     subformulas.add(current_subformula)
                     current_subformula = ""
-            elif char in ['v', 'p', 'q', 'r', '!', '-', '>', '<', '=', ' ']:
-                current_subformula += char
             else:
                 current_subformula += char
         if current_subformula: subformulas.add(current_subformula)
