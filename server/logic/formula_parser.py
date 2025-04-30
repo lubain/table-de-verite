@@ -22,7 +22,7 @@ class FormulaParser:
     @staticmethod
     def find_abr(hyp, a="", b="", r="", isA=True, isB=False):
         for h in hyp:
-            if h not in ["v","^","-",">","<","="]:
+            if h not in ["|","&","<","=",">"]:
                 if isA: a += h
                 if isB: b += h
             else:
