@@ -1,7 +1,7 @@
 class VariableExtractor:
     @staticmethod
     def extract(hypothese):
-        e = [x for x in hypothese.replace("(", "").replace(")", "").replace('v', ' ').replace('^', ' ').replace('->', ' ').replace('<=>', ' ').split()]
+        e = [x for x in hypothese.replace("(", "").replace(")", "").replace("|", " ").replace("&", " ").replace("<=>", " ").replace("=>", " ").split()]
         for i in range(len(e)):
             pivot = e[i]
             for j in range(i + 1, len(e)):

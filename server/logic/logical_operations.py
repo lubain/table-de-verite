@@ -21,9 +21,9 @@ class LogicalOperations:
         if len(va) == 0: va = pred[int(a)]
         if len(vb) == 0: vb = pred[int(b)]
         for i in range(len(B[0])):
-            if r == "v": operation = LogicalOperations.ou_logique(va[i], vb[i])
-            if r == "^": operation = LogicalOperations.et_logique(va[i], vb[i])
-            if r == "->": operation = LogicalOperations.implique(va[i], vb[i])
             if r == "<=>": operation = LogicalOperations.equivalence(va[i], vb[i])
+            if r == "|": operation = LogicalOperations.ou_logique(va[i], vb[i])
+            if r == "&": operation = LogicalOperations.et_logique(va[i], vb[i])
+            if r == "=>": operation = LogicalOperations.implique(va[i], vb[i])
             solution.append(operation)
         return solution

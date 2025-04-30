@@ -9,7 +9,7 @@ class LogicSolver:
         self.variables = VariableExtractor.extract(hypothese)
         self.truth_table = TruthTable(self.variables)
         self.parser = FormulaParser()
-        
+    
     def find_valeur_ab(self, a, b, sub_variable):
         va, vb = [], []
         if b == "":
@@ -29,7 +29,7 @@ class LogicSolver:
         return va, vb
 
     def solve(self):
-        subformul = self.parser.extract_subformulas(self.hypothese)
+        subformul = self.parser.extract_subformulas("("+self.hypothese+")")
         subformul[len(subformul)-1] = self.hypothese
         sub = subformul.copy()
         temp = [f"{i}" for i in range(len(subformul))]
